@@ -3,7 +3,7 @@ require 'bundler'
 describe "Bundler" do
   before :all do
     @bundle_output = ""
-    Bundler.with_clean_env do
+    Bundler.with_original_env do
       @bundle_output = `bundle`
     end
   end
@@ -19,7 +19,7 @@ describe "Bundler" do
 
     # http://bundler.io/v1.3/gemfile.html
     it "should specify rubygems as a source using the SSL protocol on the first line" do
-      expect(@gemfile_text =~ /source ['"]https:\/\/rubygems\.org['"]/).not_to eq(nil)
+      expect(@gemfile_text =~ /source .https:\/\/rubygems.org./).not_to eq(nil)
     end
 
     # http://bundler.io/v1.3/gemfile.html
@@ -53,7 +53,7 @@ describe "Bundler" do
         expect(@bundle_output =~ /pry/).not_to eq(nil)
 
         bundle_output_without_development = ""
-        Bundler.with_clean_env do
+        Bundler.with_original_env do
           bundle_output_without_development = `bundle --without development`
         end
         expect(bundle_output_without_development =~ /pry/).to eq(nil)
@@ -65,7 +65,7 @@ describe "Bundler" do
         expect(@bundle_output =~ /rspec/).not_to eq(nil)
 
         bundle_output_without_test = ""
-        Bundler.with_clean_env do
+        Bundler.with_original_env do
           bundle_output_without_test = `bundle --without test`
         end
         expect(bundle_output_without_test =~ /rspec/).to eq(nil)
